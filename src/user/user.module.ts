@@ -5,7 +5,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserEntity, UserEntitySchema } from 'src/entities/user.entity';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TripEntity, TripEntitySchema } from 'src/entities/trip.entity';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Module({
   imports: [
@@ -18,7 +17,7 @@ import { JwtAuthGuard } from 'src/guards/jwt.guard';
       signOptions: { expiresIn: process.env.ACCESS_TOKEN_EXPIRY },
     }),
   ],
-  controllers: [UserController, JwtAuthGuard, JwtService],
+  controllers: [UserController],
   providers: [UserService, JwtService]
 })
 export class UserModule {}

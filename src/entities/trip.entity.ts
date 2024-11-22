@@ -1,5 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+
+@Schema({ _id: false })
+export class LocationInfoEntity {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop({ required: true })
+  coordinates: string;
+
+  @Prop({ required: true })
+  photoRef: string;
+
+  @Prop({ required: true })
+  url: string;
+}
+
+export const LocationInfoSchema =
+  SchemaFactory.createForClass(LocationInfoEntity);
 
 @Schema({ timestamps: true })
 export class TripEntity {
@@ -8,11 +26,26 @@ export class TripEntity {
   @Prop({ type: Types.ObjectId, ref: 'UserEntity', required: true })
   userId: Types.ObjectId;
 
-  @Prop({ required: true })
-  appointmentDate: Date;
+  @Prop({ type: LocationInfoSchema, required: true })
+  locationInfo: LocationInfoEntity;
 
   @Prop({ required: true })
-  appointmentTime: string;
+  traveler: string;
+
+  @Prop({ required: true })
+  statDate: string;
+
+  @Prop({ required: true })
+  endDate: string;
+
+  @Prop({ required: true })
+  totalNoOfDays: number;
+
+  @Prop({ required: true })
+  budget: string;
+
+  @Prop({ type: mongoose.Schema.Types.Mixed, required: true })
+  tripPlan: any;
 }
 
 export const TripEntitySchema = SchemaFactory.createForClass(TripEntity);

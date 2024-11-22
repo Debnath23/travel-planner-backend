@@ -16,7 +16,7 @@ export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     @InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -31,12 +31,9 @@ export class JwtAuthGuard implements CanActivate {
         secret: process.env.ACCESS_TOKEN_SECRET,
       });
 
-
       const user = await this.userModel
         .findById(decodedToken._id)
         .select('-password -refreshToken');
-
-
 
       if (!user) {
         throw new HttpException(
