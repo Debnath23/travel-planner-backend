@@ -23,12 +23,6 @@ export class TripService {
         throw new NotFoundException('User does not exist!');
       }
 
-      const existingTrip = await this.tripModel.findOne({ userId });
-
-      if (existingTrip) {
-        throw new Error('Trip already exists!');
-      }
-
       const newTrip = new this.tripModel({
         userId,
         ...generateTrip,
