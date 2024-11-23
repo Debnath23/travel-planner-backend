@@ -2,12 +2,21 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Types } from 'mongoose';
 
 @Schema({ _id: false })
+export class CoordinatesInfoEntity {
+  @Prop({ required: true })
+  lat: number;
+
+  @Prop({ required: true })
+  lng: number;
+}
+
+@Schema({ _id: false })
 export class LocationInfoEntity {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
-  coordinates: string;
+  @Prop({ type: CoordinatesInfoEntity, required: true })
+  coordinates: CoordinatesInfoEntity;
 
   @Prop({ required: true })
   photoRef: string;

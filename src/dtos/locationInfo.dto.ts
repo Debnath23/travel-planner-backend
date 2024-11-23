@@ -1,5 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber, IsString, ValidateNested } from 'class-validator';
+
+export class coordinatesInfoDto {
+  @ApiProperty({ required: true })
+  @IsNumber()
+  readonly lat: number;
+
+  @ApiProperty({ required: true })
+  @IsNumber()
+  readonly lng: number;
+}
 
 export class locationInfoDto {
   @ApiProperty({ required: true })
@@ -7,8 +18,9 @@ export class locationInfoDto {
   readonly name: string;
 
   @ApiProperty({ required: true })
-  @IsString()
-  readonly coordinates: string;
+  @ValidateNested()
+  @Type(() => coordinatesInfoDto)
+  readonly coordinates: coordinatesInfoDto;
 
   @ApiProperty({ required: true })
   @IsString()
