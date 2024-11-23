@@ -36,6 +36,9 @@ export class TripService {
 
       await newTrip.save();
 
+      user.trips.push(newTrip._id);
+      await user.save();
+
       return newTrip;
     } catch (error) {
       throw error;
