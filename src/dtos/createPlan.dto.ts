@@ -30,6 +30,5 @@ export class CreatePlanDto {
   readonly budget: string;
 
   @ApiProperty({ required: true })
-  @IsJSON()
   readonly tripPlan: any;
 }
