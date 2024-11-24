@@ -10,8 +10,7 @@ export class CreatePlanDto {
   readonly locationInfo: locationInfoDto;
 
   @ApiProperty({ required: true })
-  @IsString()
-  readonly traveler: string;
+  readonly traveler: any;
 
   @ApiProperty({ required: true })
   @IsString()
