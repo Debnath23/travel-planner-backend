@@ -49,15 +49,10 @@ export class UserService {
         throw new NotFoundException('User does not exist!');
       }
 
-      console.log('profileImg:', updateUserDto.profileImg);
-
       if (updateUserDto.profileImg) {
         const cloudinaryResponse = await this.uploadProfileImage(
           updateUserDto.profileImg,
         );
-
-        console.log("cloudinaryResponse: ", cloudinaryResponse);
-        
 
         if (!cloudinaryResponse?.url) {
           throw new InternalServerErrorException(
@@ -72,10 +67,7 @@ export class UserService {
         updateUserDto,
         { new: true, select: '-password -refreshToken -trips' },
       );
-
-      console.log(">>>>>>>>>>>>");
       
-
       return updatedUser;
     } catch (error) {
       throw new InternalServerErrorException(
