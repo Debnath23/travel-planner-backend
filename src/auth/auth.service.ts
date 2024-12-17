@@ -20,7 +20,9 @@ export class AuthService {
 
   async generateAccessAndRefreshTokens(userId: Types.ObjectId) {
     try {
-      const user = await this.userModel.findById(userId);
+      const user = await this.userModel
+        .findById(userId)
+        .select('-password -refreshToken -trips');
       if (!user) {
         throw new NotFoundException('User not found!');
       }
@@ -55,7 +57,7 @@ export class AuthService {
 
       const createdUser = await this.userModel
         .findById(user._id)
-        .select('-password -refreshToken -appointments');
+        .select('-password -refreshToken -trips');
 
       if (!createdUser) {
         throw new InternalServerErrorException(
@@ -96,7 +98,7 @@ export class AuthService {
 
       const loggedInUser = await this.userModel
         .findById(user._id)
-        .select('-password -refreshToken -appointments');
+        .select('-password -refreshToken -trips');
 
       return {
         user: loggedInUser,

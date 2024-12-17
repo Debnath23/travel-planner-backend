@@ -1,8 +1,12 @@
 import {
+  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
+  InternalServerErrorException,
   NotFoundException,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -12,6 +16,7 @@ import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CreatePlanDto } from 'src/dtos/createPlan.dto';
 import { Request } from 'express';
 import { ApiTags } from '@nestjs/swagger';
+import { Types } from 'mongoose';
 
 @Controller('trip')
 @ApiTags('Trip')
@@ -62,4 +67,28 @@ export class TripController {
       throw error;
     }
   }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
+  async deleteTrip(@Param('id') tripId: string, @Req() req: Request) {
+    try {
+      if (!req.user) {
+        throw new NotFoundException('User not found!');
+      }
+  
+      const userId = req.user._id;
+      if (!Types.ObjectId.isValid(tripId)) {
+        throw new BadRequestException('Invalid trip ID!');
+      }
+  
+      await this.tripService.deleteTripService(new Types.ObjectId(tripId), new Types.ObjectId(userId));
+  
+      return {
+        message: 'Trip deleted successfully!',
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error.message || 'An error occurred while deleting the trip.');
+    }
+  }
+  
 }

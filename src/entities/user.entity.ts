@@ -10,7 +10,6 @@ export class UserEntity extends Document implements UserInterface {
   @Prop({
     unique: true,
     required: true,
-    lowercase: true,
     trim: true,
     index: true,
   })
@@ -26,6 +25,12 @@ export class UserEntity extends Document implements UserInterface {
 
   @Prop({ select: false, required: true })
   password: string;
+
+  @Prop({ required: false })
+  profileImg: string;
+
+  @Prop({ required: false })
+  phoneNumber: string;
 
   @Prop([{ type: Types.ObjectId, ref: 'TripEntity' }])
   trips: Types.ObjectId[];

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreatePlanDto } from 'src/dtos/createPlan.dto';
@@ -58,4 +58,29 @@ export class TripService {
       throw error;
     }
   }
+
+  async deleteTripService(tripId: Types.ObjectId, userId: Types.ObjectId) {
+    try {
+      const user = await this.userModel.findById(userId);
+      if (!user) {
+        throw new NotFoundException('User does not exist!');
+      }
+  
+      const trip = await this.tripModel.findById(tripId);
+      if (!trip) {
+        throw new NotFoundException('Trip does not exist!');
+      }
+  
+      if (!user.trips.includes(tripId)) {
+        throw new ForbiddenException('Unauthorized: You cannot delete this trip.');
+      }
+  
+      await trip.deleteOne();
+  
+      await this.userModel.updateOne({ _id: userId }, { $pull: { trips: tripId } });
+    } catch (error) {
+      throw new InternalServerErrorException(error.message || 'Failed to delete trip.');
+    }
+  }
+  
 }
